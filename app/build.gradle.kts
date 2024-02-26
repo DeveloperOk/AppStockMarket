@@ -12,6 +12,11 @@ android {
     namespace = "com.enterprise.appstockmarket"
     compileSdk = 34
 
+    //Data Binding and View Binding
+    buildFeatures {
+        dataBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.enterprise.appstockmarket"
         minSdk = 24
@@ -21,6 +26,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {
