@@ -1,15 +1,24 @@
 package com.enterprise.appstockmarket.view.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
+import com.enterprise.appstockmarket.R
+import com.enterprise.appstockmarket.TimeUtil
 import com.enterprise.appstockmarket.databinding.FragmentMainBinding
+import com.enterprise.appstockmarket.remotedatasource.mock.Stock
+import com.enterprise.appstockmarket.state.UiState
+import com.enterprise.appstockmarket.view.adapter.StockMarketAdapter
 import com.enterprise.appstockmarket.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +30,9 @@ class MainFragment : Fragment() {
     private var TAG = "MainFragment"
     private lateinit var binding: FragmentMainBinding
     private lateinit var mainViewModel :MainViewModel
+
+    private lateinit var stockMarketAdapter: StockMarketAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +55,44 @@ class MainFragment : Fragment() {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        stockMarketAdapter = StockMarketAdapter(activity as Context)
+        binding.recyclerViewStockMarket.adapter = stockMarketAdapter
+
         mainViewModel.viewModelScope.launch(Dispatchers.IO) {
-            mainViewModel.currentStockPriceListFlow.collect { stockList ->
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.currentStockPriceListFlow.collect { UiState ->
 
-                Log.d(TAG, "Stock name: ${stockList?.first()?.name} and Stock price: ${stockList?.first()?.currentPrice}")
+                    updateUI(UiState)
 
+                }
             }
         }
 
         return view
+
+    }
+
+    private fun updateUI(uiState: UiState) {
+        mainViewModel.viewModelScope.launch(Dispatchers.Main) {
+            when (uiState) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.lastUpdateTime.visibility = View.GONE
+                    binding.recyclerViewStockMarket.visibility = View.GONE
+                }
+                is UiState.Success -> {
+                    binding.recyclerViewStockMarket.visibility = View.VISIBLE
+                    stockMarketAdapter.stockList = uiState.stockList as ArrayList<Stock>
+                    binding.lastUpdateTime.text = "${getString(R.string.main_fragment_last_update_time)}${TimeUtil.getCurrentFormattedTime()}"
+                    binding.progressBar.visibility = View.GONE
+                    binding.lastUpdateTime.visibility = View.VISIBLE
+                }
+                is UiState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(activity, uiState.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
 
     }
 

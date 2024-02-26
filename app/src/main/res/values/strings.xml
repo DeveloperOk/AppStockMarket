@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AppStockMarket</string>
+
+    <string name="main_view_model_error_message">Error!</string>
+
+    <string name="main_fragment_usd_sign">$</string>
+    <string name="main_fragment_last_update_time">"Last Update Time: "</string>
 </resources>
