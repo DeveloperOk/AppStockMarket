@@ -58,6 +58,18 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //Gson
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //CSV
+    implementation("com.opencsv:opencsv:5.5.2")
+
+    //ViewModelScope
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

@@ -1,6 +1,8 @@
 package com.enterprise.appstockmarket.dependencyinjection
 
 import android.content.Context
+import com.enterprise.appstockmarket.remotedatasource.mock.FlowMockApi
+import com.enterprise.appstockmarket.remotedatasource.mock.mockApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +15,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-
+    @Singleton
+    @Provides
+    fun provideFlowMockApi(@ApplicationContext context: Context): FlowMockApi {
+        return mockApi(context)
+    }
 
 }
