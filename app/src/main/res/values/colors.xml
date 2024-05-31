@@ -9,4 +9,7 @@
     <color name="stock_row_border">#FF000000</color>
     <color name="stock_row_background">#FFFFFFFF</color>
 
+    <color name="stock_detail_label_text">#FF000000</color>
+    <color name="stock_detail_fragment_background">#FFFFFFFF</color>
+
 </resources>

@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.enterprise.appstockmarket.R
 import com.enterprise.appstockmarket.databinding.StockRowBinding
 import com.enterprise.appstockmarket.remotedatasource.mock.Stock
+import com.enterprise.appstockmarket.viewmodel.SharedViewModel
 
-class StockMarketAdapter(val context: Context) :
+class StockMarketAdapter(val context: Context, val navController: NavController, val sharedViewModel: SharedViewModel) :
     RecyclerView.Adapter<StockMarketAdapter.StockMarketViewHolder>() {
 
     var stockList: ArrayList<Stock> = ArrayList<Stock>()
@@ -18,7 +20,9 @@ class StockMarketAdapter(val context: Context) :
             notifyDataSetChanged()
         }
 
-    class StockMarketViewHolder(private val binding : StockRowBinding, itemView: View, stockList: ArrayList<Stock>?, context: Context) : RecyclerView.ViewHolder(itemView) {
+    class StockMarketViewHolder(private val binding : StockRowBinding, itemView: View, stockList: ArrayList<Stock>?,
+                                context: Context, private val navController: NavController,
+        private val sharedViewModel: SharedViewModel) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(stock: Stock, context: Context) {
 
@@ -32,6 +36,9 @@ class StockMarketAdapter(val context: Context) :
 
             binding.constraintLayoutStockRow.setOnClickListener{
 
+                sharedViewModel.selectedStock = stockList?.get(adapterPosition)
+                navController.navigate(R.id.action_stockListFragment_to_stockDetailFragment)
+
             }
 
         }
@@ -44,7 +51,7 @@ class StockMarketAdapter(val context: Context) :
         val binding = StockRowBinding.inflate(layoutInflater, parent, false)
         val itemView = binding.root
 
-        return StockMarketViewHolder(binding, itemView, stockList, context)
+        return StockMarketViewHolder(binding, itemView, stockList, context, navController, sharedViewModel)
 
     }
 

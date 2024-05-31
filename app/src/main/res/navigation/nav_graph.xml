@@ -9,5 +9,14 @@
         android:id="@+id/stockListFragment"
         android:name="com.enterprise.appstockmarket.view.fragment.StockListFragment"
         android:label="fragment_stock_list"
-        tools:layout="@layout/fragment_stock_list" />
+        tools:layout="@layout/fragment_stock_list" >
+        <action
+            android:id="@+id/action_stockListFragment_to_stockDetailFragment"
+            app:destination="@id/stockDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stockDetailFragment"
+        android:name="com.enterprise.appstockmarket.view.fragment.StockDetailFragment"
+        android:label="fragment_stock_detail"
+        tools:layout="@layout/fragment_stock_detail" />
 </navigation>

@@ -5,4 +5,11 @@
 
     <string name="main_fragment_usd_sign">$</string>
     <string name="main_fragment_last_update_time">"Last Update Time: "</string>
+
+
+    <string name="stock_detail_fragment_fragment_usd_sign">"$"</string>
+    <string name="stock_detail_fragment_stock_name_label">"Stock: "</string>
+    <string name="stock_detail_fragment_price_label">"Price: "</string>
+    <string name="stock_detail_empty_string">""</string>
+
 </resources>

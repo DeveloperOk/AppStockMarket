@@ -10,8 +10,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.enterprise.appstockmarket.R
 import com.enterprise.appstockmarket.TimeUtil
 import com.enterprise.appstockmarket.databinding.FragmentStockListBinding
@@ -19,6 +22,7 @@ import com.enterprise.appstockmarket.remotedatasource.mock.Stock
 import com.enterprise.appstockmarket.state.UiState
 import com.enterprise.appstockmarket.view.adapter.StockMarketAdapter
 import com.enterprise.appstockmarket.viewmodel.MainViewModel
+import com.enterprise.appstockmarket.viewmodel.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,16 +32,23 @@ import kotlinx.coroutines.launch
 class StockListFragment : Fragment() {
 
     private var TAG = "StockListFragment"
+
     private lateinit var binding: FragmentStockListBinding
+
     private lateinit var mainViewModel : MainViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     private lateinit var stockMarketAdapter: StockMarketAdapter
 
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        navController = findNavController()
+
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        sharedViewModel = ViewModelProvider(activity as ViewModelStoreOwner)[SharedViewModel::class.java]
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -55,7 +66,7 @@ class StockListFragment : Fragment() {
         binding = FragmentStockListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        stockMarketAdapter = StockMarketAdapter(activity as Context)
+        stockMarketAdapter = StockMarketAdapter(activity as Context, navController, sharedViewModel)
         binding.recyclerViewStockMarket.adapter = stockMarketAdapter
 
         mainViewModel.viewModelScope.launch(Dispatchers.IO) {
