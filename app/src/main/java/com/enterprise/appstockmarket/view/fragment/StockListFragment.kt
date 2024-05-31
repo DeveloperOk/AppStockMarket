@@ -2,20 +2,19 @@ package com.enterprise.appstockmarket.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import com.enterprise.appstockmarket.R
 import com.enterprise.appstockmarket.TimeUtil
-import com.enterprise.appstockmarket.databinding.FragmentMainBinding
+import com.enterprise.appstockmarket.databinding.FragmentStockListBinding
 import com.enterprise.appstockmarket.remotedatasource.mock.Stock
 import com.enterprise.appstockmarket.state.UiState
 import com.enterprise.appstockmarket.view.adapter.StockMarketAdapter
@@ -24,12 +23,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
-class MainFragment : Fragment() {
 
-    private var TAG = "MainFragment"
-    private lateinit var binding: FragmentMainBinding
-    private lateinit var mainViewModel :MainViewModel
+@AndroidEntryPoint
+class StockListFragment : Fragment() {
+
+    private var TAG = "StockListFragment"
+    private lateinit var binding: FragmentStockListBinding
+    private lateinit var mainViewModel : MainViewModel
 
     private lateinit var stockMarketAdapter: StockMarketAdapter
 
@@ -52,7 +52,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentStockListBinding.inflate(inflater, container, false)
         val view = binding.root
 
         stockMarketAdapter = StockMarketAdapter(activity as Context)
