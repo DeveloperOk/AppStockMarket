@@ -51,15 +51,40 @@ fun readAndParseStockData(context: Context) {
 fun fakeCurrentStockPrices(context: Context): List<Stock> {
     readAndParseStockData(context)
 
-    return initialStockData!!.map { stock ->
+     val newStockData = initialStockData!!.map { stock ->
+
         val currentPrice = stock.currentPrice
         if (stock.currentPrice == 0f) {
-            return@map stock
+            return@map stock.copy(priceTrend = PriceTrend.NEUTRAL)
         }
         val randomRangeInPercent = 0.03
         val randomLowerBound = (currentPrice * (1 - randomRangeInPercent))
         val randomUpperBound = (currentPrice * (1 + randomRangeInPercent))
         val randomPrice = Random.nextDouble(randomLowerBound, randomUpperBound).toFloat()
-        stock.copy(currentPrice = randomPrice)
+
+        val priceTrend = priceTrend(randomPrice, currentPrice)
+
+        stock.copy(currentPrice = randomPrice, priceTrend = priceTrend)
+
     }
+
+    initialStockData = newStockData
+
+    return newStockData
+}
+
+private fun priceTrend(
+    randomPrice: Float,
+    currentPrice: Float
+): PriceTrend {
+    val change = randomPrice - currentPrice
+    var priceTrend = PriceTrend.UNKNOWN
+    if (change > 0.0) {
+        priceTrend = PriceTrend.UP
+    } else if (change < 0.0) {
+        priceTrend = PriceTrend.DOWN
+    } else if (change.toDouble() == 0.0) {
+        priceTrend = PriceTrend.NEUTRAL
+    }
+    return priceTrend
 }
