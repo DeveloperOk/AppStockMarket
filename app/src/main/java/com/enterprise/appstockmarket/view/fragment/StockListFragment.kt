@@ -69,12 +69,14 @@ class StockListFragment : Fragment() {
         stockMarketAdapter = StockMarketAdapter(activity as Context, navController, sharedViewModel)
         binding.recyclerViewStockMarket.adapter = stockMarketAdapter
 
-        mainViewModel.viewModelScope.launch(Dispatchers.IO) {
+        mainViewModel.viewModelScope.launch(Dispatchers.Main) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.currentStockPriceListFlow.collect { UiState ->
+                mainViewModel.viewModelScope.launch(Dispatchers.IO) {
+                    mainViewModel.currentStockPriceListFlow.collect { UiState ->
 
-                    updateUI(UiState)
+                        updateUI(UiState)
 
+                    }
                 }
             }
         }

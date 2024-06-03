@@ -37,7 +37,7 @@ class StockMarketAdapter(val context: Context, val navController: NavController,
             }
 
         }
-        
+
         fun bind(stock: Stock, context: Context) {
 
             binding.textViewRank.text = stock.rank.toString()
